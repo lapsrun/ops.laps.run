@@ -2,6 +2,10 @@ env:
   global:
     - PATH=$HOME/.local/bin:$PATH
 
+branches:
+  only:
+    - master
+
 install:
   - pip install --user awscli
   - wget https://github.com/gohugoio/hugo/releases/download/v0.48/hugo_0.48_Linux-64bit.tar.gz
