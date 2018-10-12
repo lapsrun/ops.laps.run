@@ -42,7 +42,7 @@ process_file(){
 export -f process_file
 
 main(){
-  aws --profile personal s3 sync s3://laps.run-ops-data-private/ data/
+  aws s3 sync s3://laps.run-ops-data-private/ data/
 
   find data -name "*.yml" -exec bash -c 'process_file "$@"' bash {} \;
 
