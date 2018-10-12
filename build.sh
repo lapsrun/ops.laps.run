@@ -9,7 +9,28 @@ set -x
 process_file(){
   local source="$1"
 
-  local source_md="${source%.yml}.md"
+  # build start
+  local before_install=$(yq r "$source" timing.before_install.start)
+
+  # deploy-preview start
+  local after_success=$(yq r "$source" timing.after_success.start)
+
+  # deploy-production start
+  local before_deploy=$(yq r "$source" timing.before_deploy.start)
+
+  local date=$before_install
+  date=${date/null/$after_success}
+  date=${date/null/$before_deploy}
+
+  yq w -i "$source" date "$date"
+
+  local source_without_ext=${source%.yml}
+  local source_basename=$(basename $source_without_ext)
+
+  local build_id=$(yq r "$source" ci_build_number)
+  yq w -i "$source" title "${build_id/null/$source_basename}"
+
+  local source_md="$source_without_ext.md"
   local destination=${source_md/data/content}
 
   mkdir -p "$(dirname $destination)"
