@@ -2,20 +2,19 @@ env:
   global:
     - PATH=$HOME/.local/bin:$PATH
 
-branches:
-  only:
-    - master
+cache:
+  directories:
+    - data
 
 install:
   - pip install --user awscli
   - wget https://github.com/gohugoio/hugo/releases/download/v0.48/hugo_0.48_Linux-64bit.tar.gz
   - tar xzvf hugo_0.48_Linux-64bit.tar.gz
   - sudo mv hugo /usr/local/bin/
+  - sudo wget https://github.com/mikefarah/yq/releases/download/2.1.1/yq_linux_amd64 -O /usr/local/bin/yq
+  - sudo chmod o+x /usr/local/bin/yq
 
-script:
-  - aws s3 cp s3://laps.run-ops-data-private/ content/ --recursive
-  - HUGO_ENV=production hugo
-  - sed -i -e "s/123456abcdef/$TRAVIS_COMMIT/" public/index.html
+script: ./build.sh
 
 deploy:
   - provider: s3

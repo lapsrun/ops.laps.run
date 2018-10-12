@@ -1,7 +1,7 @@
 {{ define "main" }}
 <h2>{{.Title}}</h2>
 
-<div>{{.Content}}</div>
+<p>{{ partial "breadcrumb.html" . }}</p>
 
 {{ range .Data.Pages }}
   <div>
