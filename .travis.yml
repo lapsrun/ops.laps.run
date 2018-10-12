@@ -11,6 +11,8 @@ install:
   - wget https://github.com/gohugoio/hugo/releases/download/v0.48/hugo_0.48_Linux-64bit.tar.gz
   - tar xzvf hugo_0.48_Linux-64bit.tar.gz
   - sudo mv hugo /usr/local/bin/
+  - sudo wget https://github.com/mikefarah/yq/releases/download/2.1.1/yq_linux_amd64 -O /usr/local/bin/yq
+  - sudo chmod o+x /usr/local/bin/yq
 
 script: ./build.sh
 
