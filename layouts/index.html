@@ -2,6 +2,19 @@
 
 <h1>{{ .Site.Params.Title }}</h1>
 
+<h3>Summary</h3>
+<table>
+  <tr>
+    <th>Type</th>
+    <th>Total</th>
+  </tr>
+{{ range .Pages.GroupBy "Section" }}
+  <tr>
+    <td>{{ .Key }}</td>
+    <td>{{ len .Pages }}</td>
+  <tr>
+{{ end }}
+</table>
 
 <p>123456abcdef</p>
 
