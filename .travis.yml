@@ -12,22 +12,7 @@ install:
   - tar xzvf hugo_0.48_Linux-64bit.tar.gz
   - sudo mv hugo /usr/local/bin/
 
-script:
-  - aws s3 cp s3://laps.run-ops-data-private/ content/ --recursive
-  - find content -name "*.yml" -exec bash -c 'mv "$1" "${1%.yml}".md' - '{}' \;
-
-  # add yaml start doc to top of each file
-  ## on osx
-  # sed -i '' '1i\
-  # ---
-  # ' content/build/609.md
-  - find content -name "*.md" -exec sed -i '1 i\---' {} \;
-
-  # add yaml end doc to bottom of each file
-  - find content -name "*.md" -exec echo '---' >> {} \;
-
-  - HUGO_ENV=production hugo
-  - sed -i -e "s/123456abcdef/$TRAVIS_COMMIT/" public/index.html
+script: ./build.sh
 
 deploy:
   - provider: s3
