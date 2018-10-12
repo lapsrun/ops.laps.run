@@ -2,9 +2,9 @@ env:
   global:
     - PATH=$HOME/.local/bin:$PATH
 
-branches:
-  only:
-    - master
+cache:
+  directories:
+    - data
 
 install:
   - pip install --user awscli
