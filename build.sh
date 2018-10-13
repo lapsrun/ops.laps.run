@@ -27,11 +27,10 @@ process_file(){
   local source_without_ext=${source%.yml}
   local source_basename=$(basename $source_without_ext)
 
-  local build_id=$(yq r "$source" ci_build_number)
-  yq w -i "$source" title "${build_id/null/$source_basename}"
+  yq w -i "$source" title "$source_basename"
 
   local source_md="$source_without_ext.md"
-  local destination=${source_md/data/content}
+  local destination=${source_md/data-editable/content}
 
   mkdir -p "$(dirname $destination)"
 
@@ -43,8 +42,9 @@ export -f process_file
 
 main(){
   aws s3 sync s3://laps.run-ops-data-private/ data/
+  cp -R data data-editable
 
-  find data -name "*.yml" -exec bash -c 'process_file "$@"' bash {} \;
+  find data-editable -name "*.yml" -exec bash -c 'process_file "$@"' bash {} \;
 
   HUGO_ENV=production hugo
 
