@@ -3,3 +3,4 @@ content/deploy-production
 content/deploy-preview
 public/
 data/
+data-editable/

@@ -30,7 +30,7 @@ process_file(){
   yq w -i "$source" title "$source_basename"
 
   local source_md="$source_without_ext.md"
-  local destination=${source_md/data/content}
+  local destination=${source_md/data-editable/content}
 
   mkdir -p "$(dirname $destination)"
 
@@ -42,8 +42,9 @@ export -f process_file
 
 main(){
   aws s3 sync s3://laps.run-ops-data-private/ data/
+  cp -R data data-editable
 
-  find data -name "*.yml" -exec bash -c 'process_file "$@"' bash {} \;
+  find data-editable -name "*.yml" -exec bash -c 'process_file "$@"' bash {} \;
 
   HUGO_ENV=production hugo
 
