@@ -27,8 +27,7 @@ process_file(){
   local source_without_ext=${source%.yml}
   local source_basename=$(basename $source_without_ext)
 
-  local build_id=$(yq r "$source" ci_build_number)
-  yq w -i "$source" title "${build_id/null/$source_basename}"
+  yq w -i "$source" title "$source_basename"
 
   local source_md="$source_without_ext.md"
   local destination=${source_md/data/content}
