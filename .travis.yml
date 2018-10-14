@@ -3,7 +3,7 @@ sudo: false
 
 env:
   global:
-    - PATH=$HOME/.local/bin:$PATH
+    - PATH=$HOME/bin:$HOME/.local/bin:$PATH
 
 cache:
   directories:
@@ -11,11 +11,12 @@ cache:
 
 install:
   - pip install --user awscli
+  - mkdir -p ~/bin
   - wget https://github.com/gohugoio/hugo/releases/download/v0.48/hugo_0.48_Linux-64bit.tar.gz
   - tar xzvf hugo_0.48_Linux-64bit.tar.gz
-  - mv hugo ~/.local/bin/
-  - wget https://github.com/mikefarah/yq/releases/download/2.1.1/yq_linux_amd64 -O ~/.local/bin/
-  - chmod o+x ~/.local/bin/yq
+  - mv hugo ~/bin/
+  - wget https://github.com/mikefarah/yq/releases/download/2.1.1/yq_linux_amd64 -O ~/bin/yq
+  - chmod o+x ~/bin/yq
 
 script: ./build.sh
 
