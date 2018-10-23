@@ -6,7 +6,8 @@
 
   {{ with $.Site.GetPage (printf "%s%s%s" "build/" (string .Title) ".md") }}
   <div>Build: <a href="{{ .Permalink }}">{{ .Title }}</a></div>
-  <div>Start Time: {{ .Date.Format "2006-01-02 15:04:05 MST" }}</div>
   {{ end }}
+
+  {{ .Render "profiling" }}
 
 {{ end }}
