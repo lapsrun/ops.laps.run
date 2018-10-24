@@ -8,6 +8,43 @@
   <div>Build: <a href="{{ .Permalink }}">{{ .Title }}</a></div>
   {{ end }}
 
-  {{ .Render "profiling" }}
+  {{ .Render "duration_ms" }}
+
+  <div>Duration (ms): {{ .Scratch.Get "duration_ms" }}</div>
+
+  {{ range $event, $data := .Params.timing }}
+    {{ range $phase, $time := $data }}
+      {{ $.Scratch.Add "events" (slice (dict "event" $event "phase" $phase "time" $time)) }}
+    {{ end }}
+  {{ end }}
+
+  {{ $sorted := sort ($.Scratch.Get "events") ".time" "asc"}}
+  {{ $first := (index $sorted 0).time }}
+
+  <table>
+    <tr>
+      <th>#</th>
+      <th>event</th>
+      <th>phase</th>
+      <th>timestamp</th>
+      <th>delta (ms)</th>
+      <th>cumulative (ms)</th>
+    </tr>
+
+    {{ range $i, $dict := $sorted }}
+      {{ $prev := ((index $sorted (sub $i 1)) | default (index $sorted $i)).time }}
+
+    <tr>
+      <td>{{ $i }}</td>
+      <td>{{ .event }}</td>
+      <td>{{ .phase }}</td>
+      <td>{{ .time }}</td>
+
+      <td>{{ (sub (div (time .time).UnixNano 1000000) (div (time $prev).UnixNano 1000000)) }}</td>
+      <td>{{ (sub (div (time .time).UnixNano 1000000) (div (time $first).UnixNano 1000000)) }}</td>
+    </tr>
+    {{ end }}
+
+  </table>
 
 {{ end }}

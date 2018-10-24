@@ -1,0 +1,1 @@
+{{- .Scratch.Set "duration_ms" (sub (div (time .Params.timing.after_deploy.end).UnixNano 1000000) (div (time .Date).UnixNano 1000000)) }}
