@@ -8,9 +8,14 @@
   <div>Build: <a href="{{ .Permalink }}">{{ .Title }}</a></div>
   {{ end }}
 
+  {{ if isset .Params "result" }}
+  <div>Result: {{ if eq .Params.result 0 }}Success{{ else }}Error{{ end }}</div>
+  {{ end }}
+
   {{ .Render "duration_ms" }}
 
   <div>Duration (ms): {{ .Scratch.Get "duration_ms" }}</div>
+
 
   {{ range $event, $data := .Params.timing }}
     {{ range $phase, $time := $data }}
