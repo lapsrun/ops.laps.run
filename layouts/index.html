@@ -4,11 +4,11 @@
 
 <a href="https://status.laps.run"><img src="https://img.shields.io/uptimerobot/status/m780345795-76bb73c0fab2b92085a22f79.svg" /></a>
 
-<h3>Summary</h3>
+<h3>All-Time Build Counts</h3>
 <table>
   <tr>
     <th>Type</th>
-    <th>Total</th>
+    <th>Count</th>
   </tr>
 {{ range .Pages.GroupBy "Section" }}
   <tr>
@@ -18,6 +18,62 @@
 {{ end }}
 </table>
 
+<h3>Build Duration Trends</h3>
+<table>
+  <tr>
+    <th>Bucket</th>
+    <th>Count</th>
+    <th>Min (ms)</th>
+    <th>Max (ms)</th>
+    <th>Avg (ms)</th>
+  </tr>
+
+  <!-- i think there might be a way to use group here -->
+  <!-- https://gohugo.io/functions/group/ -->
+
+  {{ range $i, $page := first 50 (where .Data.Pages "Section" "build" ) }}
+    {{ $bucket := math.Floor (div $i 10) }}
+    {{ $.Scratch.Add (string $bucket) (slice $page) }}
+  {{ end }}
+
+  {{ range $bucket_id := slice 0 1 2 3 4 }}
+
+    {{ range $i, $page := ($.Scratch.Get (string $bucket_id)) }}
+      {{ .Render "duration_ms" }}
+
+      {{ if not ($.Scratch.Get (printf "%s%s" (string $bucket_id) "sum")) }}
+        {{ $.Scratch.Set (printf "%s%s" (string $bucket_id) "sum") 0 }}
+      {{ end }}
+
+      {{ if not ($.Scratch.Get (printf "%s%s" (string $bucket_id) "min")) }}
+        {{ $.Scratch.Set (printf "%s%s" (string $bucket_id) "min") (.Scratch.Get "duration_ms") }}
+      {{ end }}
+
+      {{ if not ($.Scratch.Get (printf "%s%s" (string $bucket_id) "max")) }}
+        {{ $.Scratch.Set (printf "%s%s" (string $bucket_id) "max") (.Scratch.Get "duration_ms") }}
+      {{ end }}
+
+      {{ if lt (.Scratch.Get "duration_ms") ($.Scratch.Get (printf "%s%s" (string $bucket_id) "min")) }}
+        {{ $.Scratch.Set (printf "%s%s" (string $bucket_id) "min") (.Scratch.Get "duration_ms") }}
+      {{ end }}
+
+      {{ if gt (.Scratch.Get "duration_ms") ($.Scratch.Get (printf "%s%s" (string $bucket_id) "max")) }}
+        {{ $.Scratch.Set (printf "%s%s" (string $bucket_id) "max") (.Scratch.Get "duration_ms") }}
+      {{ end }}
+
+      {{ $.Scratch.Add (printf "%s%s" (string $bucket_id) "sum") (.Scratch.Get "duration_ms") }}
+    {{ end }}
+
+  <tr>
+    <td>most recent {{ (mul $bucket_id 10) }}-{{ add 9 (mul $bucket_id 10) }}</td>
+    <td>{{ len ($.Scratch.Get (string $bucket_id)) }}</td>
+    <td>{{ $.Scratch.Get (printf "%s%s" (string $bucket_id) "min") }}</td>
+    <td>{{ $.Scratch.Get (printf "%s%s" (string $bucket_id) "max") }}</td>
+    <td>{{ (div ($.Scratch.Get (printf "%s%s" (string $bucket_id) "sum")) (len ($.Scratch.Get (string $bucket_id)))) }}</td>
+  </tr>
+
+  {{ end }}
+</table>
 
 <h3>Recent Builds</h3>
 <ul>
