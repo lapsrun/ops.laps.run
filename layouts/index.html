@@ -75,7 +75,7 @@
     <td>{{ $.Scratch.Get (printf "%s%s" (string $bucket_id) "min") }}</td>
     <td>{{ $.Scratch.Get (printf "%s%s" (string $bucket_id) "max") }}</td>
     <td>{{ (div ($.Scratch.Get (printf "%s%s" (string $bucket_id) "sum")) (len ($.Scratch.Get (string $bucket_id)))) }}</td>
-    <td>{{ lang.NumFmt 2 (mul (div ($.Scratch.Get (printf "%s%s" (string $bucket_id) "pass")) (len ($.Scratch.Get (string $bucket_id)))) 100) }}</td>
+    <td>{{ lang.NumFmt 2 (mul 100 (div (float ($.Scratch.Get (printf "%s%s" (string $bucket_id) "pass"))) (len ($.Scratch.Get (string $bucket_id))))) }} ({{ ($.Scratch.Get (printf "%s%s" (string $bucket_id) "pass")) }}/{{ (len ($.Scratch.Get (string $bucket_id)))}})</td>
   </tr>
 
   {{ end }}
