@@ -48,7 +48,7 @@ main(){
 
   HUGO_ENV=production hugo
 
-  sed -i -e "s/123456abcdef/${TRAVIS_COMMIT:-234567bcdefg}/" public/index.html
+  sed -i -e "s/123456abcdef/${TRAVIS_COMMIT:-234567bcdefg}/g" public/index.html
 }
 
 main
