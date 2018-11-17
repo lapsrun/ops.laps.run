@@ -3,10 +3,27 @@
 
 <p>{{ partial "breadcrumb.html" . }}</p>
 
+<table>
+  <tr>
+    <th>build</th>
+    <th>status</th>
+    <th>duration (ms)</th>
+  </tr>
+
 {{ range .Data.Pages }}
-  <div>
-    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-  </div>
+  {{ .Render "duration_ms" }}
+
+  <tr>
+    <td><a href="{{ .RelPermalink }}">{{ .Title }}</a></td>
+    {{ if isset .Params "result" }}
+      <td>{{ if eq .Params.result 0 }}Success{{ else }}Error{{ end }}</td>
+    {{ else }}
+      <td>unknown</td>
+    {{ end }}
+    <td>{{ .Scratch.Get "duration_ms" }}</td>
+  </tr>
 {{ end }}
+
+</table>
 
 {{ end }}
