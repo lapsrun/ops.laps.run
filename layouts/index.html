@@ -18,7 +18,7 @@
 {{ end }}
 </table>
 
-<h3>Build Duration Trends</h3>
+<h3>Build Trends</h3>
 <table>
   <tr>
     <th>Bucket</th>
@@ -26,6 +26,7 @@
     <th>Min (ms)</th>
     <th>Max (ms)</th>
     <th>Avg (ms)</th>
+    <th>Pass %</th>
   </tr>
 
   <!-- i think there might be a way to use group here -->
@@ -61,15 +62,20 @@
         {{ $.Scratch.Set (printf "%s%s" (string $bucket_id) "max") (.Scratch.Get "duration_ms") }}
       {{ end }}
 
+      {{ if eq $page.Params.result 0 }}
+        {{ $.Scratch.Add (printf "%s%s" (string $bucket_id) "pass") 1 }}
+      {{ end }}
+
       {{ $.Scratch.Add (printf "%s%s" (string $bucket_id) "sum") (.Scratch.Get "duration_ms") }}
     {{ end }}
 
   <tr>
-    <td>most recent {{ (mul $bucket_id 10) }}-{{ add 9 (mul $bucket_id 10) }}</td>
+    <td>last {{ (mul $bucket_id 10) }}-{{ add 9 (mul $bucket_id 10) }}</td>
     <td>{{ len ($.Scratch.Get (string $bucket_id)) }}</td>
     <td>{{ $.Scratch.Get (printf "%s%s" (string $bucket_id) "min") }}</td>
     <td>{{ $.Scratch.Get (printf "%s%s" (string $bucket_id) "max") }}</td>
     <td>{{ (div ($.Scratch.Get (printf "%s%s" (string $bucket_id) "sum")) (len ($.Scratch.Get (string $bucket_id)))) }}</td>
+    <td>{{ lang.NumFmt 2 (mul (div ($.Scratch.Get (printf "%s%s" (string $bucket_id) "pass")) (len ($.Scratch.Get (string $bucket_id)))) 100) }}</td>
   </tr>
 
   {{ end }}
