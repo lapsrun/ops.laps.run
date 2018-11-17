@@ -32,8 +32,8 @@
   <!-- i think there might be a way to use group here -->
   <!-- https://gohugo.io/functions/group/ -->
 
-  {{ range $i, $page := first 50 (where .Data.Pages "Section" "build" ) }}
-    {{ $bucket := math.Floor (div $i 10) }}
+  {{ range $i, $page := first 125 (where .Data.Pages "Section" "build" ) }}
+    {{ $bucket := math.Floor (div $i 25) }}
     {{ $.Scratch.Add (string $bucket) (slice $page) }}
   {{ end }}
 
@@ -70,7 +70,7 @@
     {{ end }}
 
   <tr>
-    <td>last {{ (mul $bucket_id 10) }}-{{ add 9 (mul $bucket_id 10) }}</td>
+    <td>last {{ (mul $bucket_id 25) }}-{{ add 24 (mul $bucket_id 25) }}</td>
     <td>{{ len ($.Scratch.Get (string $bucket_id)) }}</td>
     <td>{{ $.Scratch.Get (printf "%s%s" (string $bucket_id) "min") }}</td>
     <td>{{ $.Scratch.Get (printf "%s%s" (string $bucket_id) "max") }}</td>
