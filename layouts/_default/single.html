@@ -16,6 +16,13 @@
 
   <div>Duration (ms): {{ .Scratch.Get "duration_ms" }}</div>
 
+  {{ if isset .Params "html_total_loc" }}
+  <div>Total lines of rendered html: {{ .Params.html_total_loc }}</div>
+  {{ end }}
+
+  {{ if isset .Params "all_tracks_list_file_size_bytes" }}
+  <div>Size of rendered all tracks list page (bytes): {{ .Params.all_tracks_list_file_size_bytes }}</div>
+  {{ end }}
 
   {{ range $event, $data := .Params.timing }}
     {{ range $phase, $time := $data }}
