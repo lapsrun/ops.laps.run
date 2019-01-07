@@ -22,7 +22,7 @@ script: ./build.sh
 
 deploy:
   - provider: script
-    script: aws s3 sync --size-only public/ ops.laps.run
+    script: aws s3 sync --size-only public/ s3://ops.laps.run
     skip_cleanup: true
     on:
       repo: lapsrun/ops.laps.run
