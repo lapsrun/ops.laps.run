@@ -1,4 +1,4 @@
-baseURL = "https://ops.laps.run"
+baseURL = "https://ops.laps.run/"
 languageCode = "en-us"
 title = "laps.run ops panel"
 
