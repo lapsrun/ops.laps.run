@@ -42,6 +42,7 @@ export -f process_file
 
 main(){
   aws s3 sync s3://laps.run-ops-data-private/ data/
+  rm -rf data-editable
   cp -R data data-editable
 
   find data-editable -name "*.yml" -exec bash -c 'process_file "$@"' bash {} \;
