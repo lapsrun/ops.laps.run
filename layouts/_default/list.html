@@ -8,6 +8,7 @@
     <th>build</th>
     <th>status</th>
     <th>duration (ms)</th>
+    <th>rendered html (loc)</th>
   </tr>
 
 {{ range .Data.Pages }}
@@ -21,6 +22,11 @@
       <td>unknown</td>
     {{ end }}
     <td>{{ .Scratch.Get "duration_ms" }}</td>
+    {{ if isset .Params "html_total_loc" }}
+      <td>{{ .Params.html_total_loc }}</td>
+    {{ else }}
+      <td>unknown</td>
+    {{ end }}
   </tr>
 {{ end }}
 
