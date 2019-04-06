@@ -4,7 +4,7 @@
 
 <a href="https://status.laps.run"><img src="https://img.shields.io/uptimerobot/status/m780345795-76bb73c0fab2b92085a22f79.svg" /></a>
 
-<h3>All-Time Build Counts</h3>
+<h3>All-Time Build/Deploy Counts by Type</h3>
 <table>
   <tr>
     <th>Type</th>
@@ -107,6 +107,25 @@
 {{ end }}
   <li><a href="{{ with .Site.GetPage "section" "deploy-preview" }}{{ .Permalink }}{{ end }}">More...</a></li>
 </ul>
+
+<h3>Monthly Builds by Type</h3>
+<table>
+  <tr>
+    <th>Month</th>
+    <th>Build</th>
+    <th>Preview</th>
+    <th>Production</th>
+  </tr>
+{{ range .Pages.GroupByDate "2006-01" }}
+  {{ $month := .Key }}
+  <tr>
+    <td>{{ $month }}</td>
+  {{ range .Pages.GroupBy "Section" }}
+    <td>{{ len .Pages }}</td>
+  {{ end }}
+  <tr>
+{{ end }}
+</table>
 
 <div><a href="{{ $.Site.Params.github_repo }}tree/123456abcdef">123456abcdef</a></div>
 <div>{{ now.Format "2006-01-02T15:04:05-0700" }}</div>
