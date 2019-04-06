@@ -108,6 +108,25 @@
   <li><a href="{{ with .Site.GetPage "section" "deploy-preview" }}{{ .Permalink }}{{ end }}">More...</a></li>
 </ul>
 
+<h3>Monthly Builds by Type</h3>
+<table>
+  <tr>
+    <th>Month</th>
+    <th>Build</th>
+    <th>Preview</th>
+    <th>Production</th>
+  </tr>
+{{ range .Pages.GroupByDate "2006-01" }}
+  {{ $month := .Key }}
+  <tr>
+    <td>{{ $month }}</td>
+  {{ range .Pages.GroupBy "Section" }}
+    <td>{{ len .Pages }}</td>
+  {{ end }}
+  <tr>
+{{ end }}
+</table>
+
 <div><a href="{{ $.Site.Params.github_repo }}tree/123456abcdef">123456abcdef</a></div>
 <div>{{ now.Format "2006-01-02T15:04:05-0700" }}</div>
 
