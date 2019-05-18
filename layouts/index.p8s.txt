@@ -14,7 +14,10 @@
     {{- $.Scratch.Add "duration_ms_count" 1 -}}
   {{ end }}
 
-
+  {{- if isset $page.Params "html_total_loc" -}}
+    {{- $.Scratch.Add "html_loc_sum" $page.Params.html_total_loc -}}
+    {{- $.Scratch.Add "html_loc_count" 1 -}}
+  {{- end -}}
 {{- end -}}
 
 # HELP build_success The number of successful builds.
@@ -26,3 +29,9 @@ build_duration_ms_sum{type="build"} {{ $.Scratch.Get "duration_ms_sum" }}
 # HELP build_duration_ms_count The count of all builds with a non-null duration
 # TYPE build_duration_ms_count counter
 build_duration_ms_count{type="build"} {{ $.Scratch.Get "duration_ms_count" }}
+# HELP build_duration_ms_sum The sum of total lines of rendered html in each build
+# TYPE build_duration_ms_sum counter
+build_html_loc_sum{type="build"} {{ $.Scratch.Get "html_loc_sum" }}
+# HELP build_html_loc_count The count of all builds with a non-null sum of total lines of html
+# TYPE build_html_loc_count counter
+build_html_loc_count{type="build"} {{ $.Scratch.Get "html_loc_count" }}
