@@ -1,6 +1,28 @@
 # HELP builds_total The total number of builds.
 # TYPE builds_total counter
-builds_total{} {{ len $.Data.Pages }}
-builds_total{type="build"} {{ len (where $.Data.Pages "Section" "build") }}
-builds_total{type="deploy-preview"} {{ len (where $.Data.Pages "Section" "deploy-preview") }}
-builds_total{type="deploy-production"} {{ len (where $.Data.Pages "Section" "deploy-production") }}
+{{ range $.Data.Pages.GroupBy "Section" -}}
+  build_total{type="{{ .Key }}"} {{ len .Pages }}
+{{ end -}}
+
+{{- range $i, $page := where $.Data.Pages "Section" "build" -}}
+  {{- if eq $page.Params.result 0 -}}
+    {{- $.Scratch.Add "successes" 1 -}}
+  {{- end -}}
+  {{- .Render "duration_ms" -}}
+  {{- $.Scratch.Add "duration_ms_sum" (.Scratch.Get "duration_ms" | default 0) -}}
+  {{ if gt (.Scratch.Get "duration_ms" | default -1) -1 }}
+    {{- $.Scratch.Add "duration_ms_count" 1 -}}
+  {{ end }}
+
+
+{{- end -}}
+
+# HELP build_success The number of successful builds.
+# TYPE build_success counter
+build_success{type="build"} {{ $.Scratch.Get "successes" }}
+# HELP build_duration_ms_sum The summed duration of all builds in milliseconds
+# TYPE build_duration_ms_sum counter
+build_duration_ms_sum{type="build"} {{ $.Scratch.Get "duration_ms_sum" }}
+# HELP build_duration_ms_count The count of all builds with a non-null duration
+# TYPE build_duration_ms_count counter
+build_duration_ms_count{type="build"} {{ $.Scratch.Get "duration_ms_count" }}
