@@ -1,0 +1,6 @@
+# HELP builds_total The total number of builds.
+# TYPE builds_total counter
+builds_total{} {{ len $.Data.Pages }}
+builds_total{type="build"} {{ len (where $.Data.Pages "Section" "build") }}
+builds_total{type="deploy-preview"} {{ len (where $.Data.Pages "Section" "deploy-preview") }}
+builds_total{type="deploy-production"} {{ len (where $.Data.Pages "Section" "deploy-production") }}

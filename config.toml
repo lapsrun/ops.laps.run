@@ -14,6 +14,13 @@ title = "laps.run ops panel"
 [mediaTypes]
   [mediaTypes."text/csv"]
     suffixes = ["csv"]
+  [outputFormats."p8s"]
+    name = "p8s"
+    basename = "p8s"
+    isPlainText = true
+    isHTML = false
+    mediaType = "text/plain"
 
 [outputs]
+  home = ["HTML", "RSS", "p8s"]
   section = ["HTML", "RSS", "CSV"]
