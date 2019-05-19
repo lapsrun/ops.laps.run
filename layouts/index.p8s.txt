@@ -20,7 +20,7 @@
     {{- $.Scratch.Add "html_loc_count" 1 -}}
   {{- end -}}
 
-  {{- if isset .Params "all_tracks_list_file_size_bytes" -}}
+  {{- if isset $page.Params "all_tracks_list_file_size_bytes" -}}
     {{- $.Scratch.Add "all_tracks_bytes_sum" $page.Params.all_tracks_list_file_size_bytes -}}
     {{- $.Scratch.Add "all_tracks_bytes_count" 1 -}}
   {{- end -}}
