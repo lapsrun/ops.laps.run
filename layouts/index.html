@@ -129,5 +129,6 @@
 
 <div><a href="{{ $.Site.Params.github_repo }}tree/123456abcdef">123456abcdef</a></div>
 <div>{{ now.Format "2006-01-02T15:04:05-0700" }}</div>
+<div><a href="{{ (.OutputFormats.Get "p8s").Permalink }}">p8s</a></div>
 
 {{ end }}
