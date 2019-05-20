@@ -18,8 +18,10 @@ $.Scratch.Set "html_loc_sum" 0
   {{ end }}
 
   {{- if isset $page.Params "html_total_loc" -}}
-    {{- $.Scratch.Add "html_loc_sum" (int $page.Params.html_total_loc) -}}
-    {{- $.Scratch.Add "html_loc_count" 1 -}}
+    {{- if not (eq $page.Params.html_total_loc "") -}}
+      {{- $.Scratch.Add "html_loc_sum" (int $page.Params.html_total_loc) -}}
+      {{- $.Scratch.Add "html_loc_count" 1 -}}
+    {{- end -}}
   {{- end -}}
 {{- end }}
 # HELP build_success The number of successful builds.
