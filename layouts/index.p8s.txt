@@ -1,0 +1,60 @@
+# HELP builds_total The total number of builds.
+# TYPE builds_total counter
+{{ range $.Data.Pages.GroupBy "Section" -}}
+  build_total{type="{{ .Key }}"} {{ len .Pages }}
+{{ end -}}
+
+$.Scratch.Set "html_loc_sum" 0
+
+{{- range $i, $page := where $.Data.Pages "Section" "build" -}}
+  {{- if eq $page.Params.result 0 -}}
+    {{- $.Scratch.Add "successes" 1 -}}
+  {{- end -}}
+
+  {{- .Render "duration_ms" -}}
+  {{- $.Scratch.Add "duration_ms_sum" (.Scratch.Get "duration_ms" | default 0) -}}
+  {{ if gt (.Scratch.Get "duration_ms" | default -1) -1 }}
+    {{- $.Scratch.Add "duration_ms_count" 1 -}}
+  {{ end }}
+
+  {{- if isset $page.Params "html_total_loc" -}}
+    {{- if not (eq $page.Params.html_total_loc "") -}}
+      {{- $.Scratch.Add "html_loc_sum" (int $page.Params.html_total_loc) -}}
+      {{- $.Scratch.Add "html_loc_count" 1 -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- if isset $page.Params "all_tracks_list_file_size_bytes" -}}
+    {{ if not (eq $page.Params.all_tracks_list_file_size_bytes "") }}
+      {{- $.Scratch.Add "all_tracks_bytes_sum" $page.Params.all_tracks_list_file_size_bytes -}}
+      {{- $.Scratch.Add "all_tracks_bytes_count" 1 -}}
+    {{ end }}
+  {{- end -}}
+{{- end }}
+# HELP build_success The number of successful builds.
+# TYPE build_success counter
+build_success{type="build"} {{ $.Scratch.Get "successes" }}
+
+# HELP build_duration_ms_sum The summed duration of all builds in milliseconds
+# TYPE build_duration_ms_sum counter
+build_duration_ms_sum{type="build"} {{ $.Scratch.Get "duration_ms_sum" }}
+
+# HELP build_duration_ms_count The count of all builds with a non-null duration
+# TYPE build_duration_ms_count counter
+build_duration_ms_count{type="build"} {{ $.Scratch.Get "duration_ms_count" }}
+
+# HELP build_html_loc_sum The sum of total lines of rendered html of all builds
+# TYPE build_html_loc_sum counter
+build_html_loc_sum{type="build"} {{ $.Scratch.Get "html_loc_sum" }}
+
+# HELP build_html_loc_count The count of all builds with a non-null sum of total lines of html
+# TYPE build_html_loc_count counter
+build_html_loc_count{type="build"} {{ $.Scratch.Get "html_loc_count" }}
+
+# HELP build_all_tracks_list_bytes_sum The sum of bytes of all builds of the tracks list page html
+# TYPE build_all_tracks_list_bytes_sum counter
+build_all_tracks_list_bytes_sum{type="build"} {{ $.Scratch.Get "all_tracks_bytes_sum" }}
+
+# HELP build_all_tracks_list_bytes_count The count of all builds with a non-null bytes measurement of tracks list page html
+# TYPE build_all_tracks_list_bytes_count counter
+build_all_tracks_list_bytes_count{type="build"} {{ $.Scratch.Get "all_tracks_bytes_count" }}
