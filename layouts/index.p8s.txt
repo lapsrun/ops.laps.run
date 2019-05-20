@@ -4,8 +4,6 @@
   build_total{type="{{ .Key }}"} {{ len .Pages }}
 {{ end -}}
 
-$.Scratch.Set "html_loc_sum" 0
-
 {{- range $i, $page := where $.Data.Pages "Section" "build" -}}
   {{- if eq $page.Params.result 0 -}}
     {{- $.Scratch.Add "successes" 1 -}}
@@ -13,7 +11,7 @@ $.Scratch.Set "html_loc_sum" 0
 
   {{- .Render "duration_ms" -}}
   {{- $.Scratch.Add "duration_ms_sum" (.Scratch.Get "duration_ms" | default 0) -}}
-  {{ if gt (.Scratch.Get "duration_ms" | default -1) -1 }}
+  {{- if gt (.Scratch.Get "duration_ms" | default -1) -1 -}}
     {{- $.Scratch.Add "duration_ms_count" 1 -}}
   {{ end }}
 
