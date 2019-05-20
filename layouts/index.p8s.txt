@@ -23,6 +23,13 @@ $.Scratch.Set "html_loc_sum" 0
       {{- $.Scratch.Add "html_loc_count" 1 -}}
     {{- end -}}
   {{- end -}}
+
+  {{- if isset $page.Params "all_tracks_list_file_size_bytes" -}}
+    {{ if gt ($page.Params.all_tracks_list_file_size_bytes | default 0) 0 }}
+      {{- $.Scratch.Add "all_tracks_bytes_sum" $page.Params.all_tracks_list_file_size_bytes -}}
+      {{- $.Scratch.Add "all_tracks_bytes_count" 1 -}}
+    {{ end }}
+  {{- end -}}
 {{- end }}
 # HELP build_success The number of successful builds.
 # TYPE build_success counter
@@ -43,3 +50,11 @@ build_html_loc_sum{type="build"} {{ $.Scratch.Get "html_loc_sum" }}
 # HELP build_html_loc_count The count of all builds with a non-null sum of total lines of html
 # TYPE build_html_loc_count counter
 build_html_loc_count{type="build"} {{ $.Scratch.Get "html_loc_count" }}
+
+# HELP build_all_tracks_list_bytes_sum The sum of bytes of all builds of the tracks list page html
+# TYPE build_all_tracks_list_bytes_sum counter
+build_all_tracks_list_bytes_sum{type="build"} {{ $.Scratch.Get "all_tracks_bytes_sum" }}
+
+# HELP build_all_tracks_list_bytes_count The count of all builds with a non-null bytes measurement of tracks list page html
+# TYPE build_all_tracks_list_bytes_count counter
+build_all_tracks_list_bytes_count{type="build"} {{ $.Scratch.Get "all_tracks_bytes_count" }}
