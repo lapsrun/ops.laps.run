@@ -4,6 +4,8 @@
   build_total{type="{{ .Key }}"} {{ len .Pages }}
 {{ end -}}
 
+$.Scratch.Set "html_loc_sum" 0
+
 {{- range $i, $page := where $.Data.Pages "Section" "build" -}}
   {{- if eq $page.Params.result 0 -}}
     {{- $.Scratch.Add "successes" 1 -}}
