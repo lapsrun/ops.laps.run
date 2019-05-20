@@ -18,7 +18,7 @@ $.Scratch.Set "html_loc_sum" 0
   {{ end }}
 
   {{- if isset $page.Params "html_total_loc" -}}
-    {{- $.Scratch.Add "html_loc_sum" $page.Params.html_total_loc -}}
+    {{- $.Scratch.Add "html_loc_sum" (int $page.Params.html_total_loc) -}}
     {{- $.Scratch.Add "html_loc_count" 1 -}}
   {{- end -}}
 {{- end }}
