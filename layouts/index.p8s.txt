@@ -12,7 +12,7 @@
   {{- $.Scratch.Add "duration_ms_sum" (.Scratch.Get "duration_ms" | default 0) -}}
   {{- if gt (.Scratch.Get "duration_ms" | default -1) -1 -}}
     {{- $.Scratch.Add "duration_ms_count" 1 -}}
-  {{- end }}
+  {{- end -}}
   {{- if isset $page.Params "html_total_loc" -}}
     {{- if not (eq $page.Params.html_total_loc "") -}}
       {{- $.Scratch.Add "html_loc_sum" (int $page.Params.html_total_loc) -}}
@@ -25,7 +25,7 @@
       {{- $.Scratch.Add "all_tracks_bytes_count" 1 -}}
     {{- end -}}
   {{- end -}}
-{{- end }}
+{{- end -}}
 # HELP build_success The number of successful builds.
 # TYPE build_success counter
 build_success{type="build"} {{ $.Scratch.Get "successes" }}
